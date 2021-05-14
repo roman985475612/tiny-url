@@ -1,51 +1,3 @@
-<?php
-
-use core\DB;
-
-spl_autoload_register();
-
-$db = new DB(
-    host: 'localhost',
-    user: 'root',
-    pass: 'root',
-    db: 'db_tinyurl'
-);
-
-session_start();
-
-if ($_SERVER["REQUEST_METHOD"] == "GET") {
-    if (isset($_SESSION['short'])) {
-        $short = $_SESSION['short'];
-        unset($_SESSION['short']);
-    }
-}
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    $url = $short = '';
-
-    $url = $_POST['url'];
-    $url = trim($url);
-    $url = stripslashes($url);
-    $url = htmlspecialchars($url);
-    
-    if (empty($result = $db->find('url', $url))) {
-        $short = hash('crc32', $url);
-
-        $db->insert(
-            url: $url,
-            short: $short
-        );
-    } else {
-        $short = $result['short'];
-    }
-
-    $_SESSION['short'] = $short;
-
-    header('Location: /');
-}
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -64,17 +16,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </section>
 
         <section class="section">
-            <?php if (!empty($short)): ?>
-            <div class="columns is-mobile is-centered">
+            <div id="notify" class="columns is-mobile is-centered is-hidden">
                 <div class="column is-half">
                     <div class="notification is-primary is-light">
                         <button class="delete"></button>
                         <h3 class="title is-4">Ваша ссылка:</h3>
-                        <a class="subtitle is-4" href="//<?= $_SERVER['HTTP_HOST'] . '/' . $short ?>"><?= $_SERVER['HTTP_HOST'] . '/' . $short ?></a>
+                        <a id="link" class="subtitle is-4"></a>
                     </div>
                 </div>
             </div>
-            <?php endif ?>
 
             <div class="columns is-mobile is-centered">
                 <div class="column is-half">
@@ -106,6 +56,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $notification.parentNode.removeChild($notification);
                 });
             });
+
+            // Form          
+            const $form = document.querySelector('form')
+            const $input = document.querySelector('input[name="url"]')
+            const $notify = document.getElementById('notify')
+            const $link = document.getElementById('link')
+
+            $form.addEventListener('submit', e => {
+                e.preventDefault()
+                
+                let data = new FormData($form);
+
+                fetch('/form.php', {
+                    method: 'POST',
+                    body: data
+                })
+                .then(response => response.json())
+                .then(result => {
+                    $input.value = ''
+
+                    shortUrl = window.location.href + result.short
+
+                    $notify.classList.remove('is-hidden')
+                    $link.innerText = shortUrl
+                    $link.setAttribute('href', shortUrl)
+                })
+            })
         });
     </script>
 </body>
