@@ -1,3 +1,30 @@
+<?php
+$request = $_SERVER['REQUEST_URI'];
+$request = trim($request, '/');    
+
+if ($request) {
+    spl_autoload_register();
+
+    $db = new \core\DB(
+        host: 'localhost',
+        user: 'root',
+        pass: 'root',
+        db: 'db_tinyurl'
+    );
+    
+    if (!empty($result = $db->find('short', $request))) {
+        $redirectUrl = $result['url'];
+        if (substr($redirectUrl, 0, 4) !== 'http') {
+            $redirectUrl .= '//';
+        }
+
+        header("Location: " . $redirectUrl);
+        exit();
+    } else {
+        header("Location: /");
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,7 +48,7 @@
                     <div class="notification is-primary is-light">
                         <button class="delete"></button>
                         <h3 class="title is-4">Ваша ссылка:</h3>
-                        <a id="link" class="subtitle is-4"></a>
+                        <a id="link" target="_blank" class="subtitle is-4"></a>
                     </div>
                 </div>
             </div>
@@ -47,43 +74,6 @@
         </section>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            (document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
-                const $notification = $delete.parentNode;
-
-                $delete.addEventListener('click', () => {
-                $notification.parentNode.removeChild($notification);
-                });
-            });
-
-            // Form          
-            const $form = document.querySelector('form')
-            const $input = document.querySelector('input[name="url"]')
-            const $notify = document.getElementById('notify')
-            const $link = document.getElementById('link')
-
-            $form.addEventListener('submit', e => {
-                e.preventDefault()
-                
-                let data = new FormData($form);
-
-                fetch('/form.php', {
-                    method: 'POST',
-                    body: data
-                })
-                .then(response => response.json())
-                .then(result => {
-                    $input.value = ''
-
-                    shortUrl = window.location.href + result.short
-
-                    $notify.classList.remove('is-hidden')
-                    $link.innerText = shortUrl
-                    $link.setAttribute('href', shortUrl)
-                })
-            })
-        });
-    </script>
+    <script src="/js/main.js"></script>
 </body>
 </html>
