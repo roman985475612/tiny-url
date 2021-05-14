@@ -29,7 +29,7 @@ if ($request) {
 </head>
 <body>
     <div class="container">
-        <section class="hero is-success">
+        <section class="hero is-link">
             <div class="hero-body">
                 <p class="title">Tiny URL</p>
                 <p class="subtitle">Сервис коротких ссылок</p>
@@ -39,7 +39,7 @@ if ($request) {
         <section class="section">
             <div id="notify" class="columns is-mobile is-centered is-hidden">
                 <div class="column is-half">
-                    <div class="notification is-primary is-light">
+                    <div class="notification is-link is-light">
                         <button class="delete"></button>
                         <h3 class="title is-4">Ваша ссылка:</h3>
                         <a id="link" target="_blank" class="subtitle is-4"></a>
