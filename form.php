@@ -19,7 +19,11 @@ if (isset($_POST["url"])) {
     $url = trim($url);
     $url = stripslashes($url);
     $url = htmlspecialchars($url);
-    
+
+    if (substr($url, 0, 4) !== 'http') {
+        $url = '//' . $url;
+    }
+
     if (empty($result = $db->find('url', $url))) {
         $short = hash('crc32', $url);
 

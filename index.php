@@ -1,6 +1,5 @@
 <?php
-$request = $_SERVER['REQUEST_URI'];
-$request = trim($request, '/');    
+$request = trim($_SERVER['REQUEST_URI'], '/');    
 
 if ($request) {
     spl_autoload_register();
@@ -12,17 +11,12 @@ if ($request) {
         db: 'db_tinyurl'
     );
     
-    if (!empty($result = $db->find('short', $request))) {
-        $redirectUrl = $result['url'];
-        if (substr($redirectUrl, 0, 4) !== 'http') {
-            $redirectUrl .= '//';
-        }
+    $result = $db->find('short', $request);
 
-        header("Location: " . $redirectUrl);
-        exit();
-    } else {
-        header("Location: /");
-    }
+    $redirectUrl = empty($result) ? '/' : $result['url'];
+
+    header("Location: " . $redirectUrl);
+    exit();
 }
 ?>
 <!DOCTYPE html>

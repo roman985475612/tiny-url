@@ -1,17 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
-    (document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
-        const $notification = $delete.parentNode;
-
-        $delete.addEventListener('click', () => {
-        $notification.parentNode.removeChild($notification);
-        });
-    });
-
-    // Form          
     const $form = document.querySelector('form')
     const $input = document.querySelector('input[name="url"]')
     const $notify = document.getElementById('notify')
+    const $btnClose = document.querySelector('.notification .delete')
     const $link = document.getElementById('link')
+
+    $btnClose.addEventListener('click', e => {
+        $notify.classList.add('is-hidden')
+    })
 
     $form.addEventListener('submit', e => {
         e.preventDefault()
