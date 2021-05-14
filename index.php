@@ -1,3 +1,51 @@
+<?php
+
+use core\DB;
+
+spl_autoload_register();
+
+$db = new DB(
+    host: 'localhost',
+    user: 'root',
+    pass: 'root',
+    db: 'db_tinyurl'
+);
+
+session_start();
+
+if ($_SERVER["REQUEST_METHOD"] == "GET") {
+    if (isset($_SESSION['short'])) {
+        $short = $_SESSION['short'];
+        unset($_SESSION['short']);
+    }
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $url = $short = '';
+
+    $url = $_POST['url'];
+    $url = trim($url);
+    $url = stripslashes($url);
+    $url = htmlspecialchars($url);
+    
+    if (empty($result = $db->find('url', $url))) {
+        $short = hash('crc32', $url);
+
+        $db->insert(
+            url: $url,
+            short: $short
+        );
+    } else {
+        $short = $result['short'];
+    }
+
+    $_SESSION['short'] = $short;
+
+    header('Location: /');
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,23 +64,25 @@
         </section>
 
         <section class="section">
+            <?php if (!empty($short)): ?>
             <div class="columns is-mobile is-centered">
                 <div class="column is-half">
                     <div class="notification is-primary is-light">
                         <button class="delete"></button>
                         <h3 class="title is-4">Ваша ссылка:</h3>
-                        <a class="subtitle is-4" href="//<?= $_SERVER['HTTP_HOST'] ?>/d4g4"><?= $_SERVER['HTTP_HOST'] ?>/d4g4</a>
+                        <a class="subtitle is-4" href="//<?= $_SERVER['HTTP_HOST'] . '/' . $short ?>"><?= $_SERVER['HTTP_HOST'] . '/' . $short ?></a>
                     </div>
                 </div>
             </div>
+            <?php endif ?>
 
             <div class="columns is-mobile is-centered">
                 <div class="column is-half">
-                    <form action="" class="box">
+                    <form action="" method="POST" class="box">
                         <div class="field">
                             <label class="label">URL</label>
                             <div class="control">
-                                <input class="input" type="text" placeholder="Введите URL">
+                                <input name="url" class="input" type="text" placeholder="Введите URL">
                             </div>
                         </div>
 
