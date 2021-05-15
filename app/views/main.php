@@ -10,7 +10,7 @@
 
         <section class="section">
             <div id="notify" class="columns is-mobile is-centered is-hidden">
-                <div class="column is-half">
+                <div class="column is-half-desktop">
                     <div class="notification is-link is-light">
                         <button class="delete"></button>
                         <h3 class="title is-4">Ваша ссылка:</h3>
@@ -20,7 +20,7 @@
             </div>
 
             <div class="columns is-mobile is-centered">
-                <div class="column is-half">
+                <div class="column is-half-desktop">
                     <form action="" method="POST" class="box">
                         <div class="field">
                             <label class="label">URL</label>
