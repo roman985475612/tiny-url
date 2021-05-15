@@ -6,12 +6,7 @@ class DB
 {
     private $conn;
 
-    public function __construct(
-        private string $host,
-        private string $user,
-        private string $pass,
-        private string $db,
-    )
+    public function __construct()
     {
         $this->connect();
         $this->createDb();
@@ -21,7 +16,7 @@ class DB
     public function connect()
     {
         try {
-            $this->conn = new \PDO("mysql:host=$this->host", $this->user, $this->pass);
+            $this->conn = new \PDO("mysql:host=" . DB_HOST, DB_USER, DB_PASS);
             $this->conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         } catch(PDOException $e) {
             echo "Connection failed: " . $e->getMessage();
@@ -30,19 +25,21 @@ class DB
 
     public function createDb()
     {
-        $sql = "CREATE DATABASE IF NOT EXISTS $this->db";
+        $sql = "CREATE DATABASE IF NOT EXISTS " . DB_NAME;
         $this->conn->exec($sql);
     }
 
     public function createTable()
     {
-        $sql = "USE $this->db;
-        CREATE TABLE IF NOT EXISTS urls (
+        $sql = '';        
+        $sql .= "USE " . DB_NAME . ";";
+        $sql .= "CREATE TABLE IF NOT EXISTS urls (
             id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
             url VARCHAR(255),
             short VARCHAR(255),
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         ) ENGINE = InnoDB";
+
         $this->conn->exec($sql);
     }
 

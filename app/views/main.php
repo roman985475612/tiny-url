@@ -1,37 +1,9 @@
-<?php
-$request = trim($_SERVER['REQUEST_URI'], '/');    
+<?php require_once APP_ROOT . '/views/header.php' ?>
 
-if ($request) {
-    spl_autoload_register();
-
-    $db = new \core\DB(
-        host: 'localhost',
-        user: 'root',
-        pass: 'root',
-        db: 'db_tinyurl'
-    );
-    
-    $result = $db->find('short', $request);
-
-    $redirectUrl = empty($result) ? '/' : $result['url'];
-
-    header("Location: " . $redirectUrl);
-    exit();
-}
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
-    <title>Tiny URL</title>
-</head>
-<body>
-    <div class="container">
+<div class="container">
         <section class="hero is-link">
             <div class="hero-body">
-                <p class="title">Tiny URL</p>
+                <p class="title"><?= APP_NAME ?></p>
                 <p class="subtitle">Сервис коротких ссылок</p>
             </div>
         </section>
@@ -68,6 +40,4 @@ if ($request) {
         </section>
     </div>
 
-    <script src="/js/main.js"></script>
-</body>
-</html>
+<?php require_once APP_ROOT . '/views/footer.php' ?>
