@@ -28,7 +28,10 @@ class FormController
                 $short = $result['short'];
             }
         
-            echo json_encode(['short' => $short]);
+            echo json_encode([
+                'short' => $short,
+                'url' => $url,
+            ]);
         }
     }
 }

@@ -3,7 +3,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const $input = document.querySelector('input[name="url"]')
     const $notify = document.getElementById('notify')
     const $btnClose = document.querySelector('.notification .delete')
-    const $link = document.getElementById('link')
+    const $inputUrl = document.getElementById('redirectUrl')
+    const $originUrl = document.getElementById('originUrl')
+
+    $inputUrl.value = ''
 
     $btnClose.addEventListener('click', e => {
         $notify.classList.add('is-hidden')
@@ -25,8 +28,20 @@ document.addEventListener('DOMContentLoaded', () => {
             shortUrl = window.location.origin + '/' + result.short
 
             $notify.classList.remove('is-hidden')
-            $link.innerText = shortUrl
-            $link.setAttribute('href', shortUrl)
+            $inputUrl.value = shortUrl
+            $originUrl.innerText = result.url
         })
+    })
+
+    const $btnCopy = document.getElementById('copy')
+                
+    $btnCopy.addEventListener('click', () => {
+        $inputUrl.select()
+        const originalText = $btnCopy.innerText;
+        $btnCopy.innerText = 'Copied!';
+        setTimeout(() => {
+            $btnCopy.innerText = originalText;
+        }, 5000);    
+        document.execCommand("copy")
     })
 });

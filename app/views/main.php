@@ -13,19 +13,26 @@
                 <div class="column is-half-desktop">
                     <div class="notification is-link is-light">
                         <button class="delete"></button>
-                        <h3 class="title is-4">Ваша ссылка:</h3>
-                        <a id="link" target="_blank" class="subtitle is-4"></a>
+                        <h4 class="title is-4">Ваша ссылка:</h4>
+                        <h6 id="originUrl" class="title is-6"></h6>
+                        <div class="field is-grouped">
+                            <div class="control is-expanded">
+                                <input id="redirectUrl" class="input" type="text" readonly>
+                            </div>
+                            <div class="control">
+                                <button id="copy" class="button is-link">Copy</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-
             <div class="columns is-mobile is-centered">
                 <div class="column is-half-desktop">
                     <form action="" method="POST" class="box">
                         <div class="field">
                             <label class="label">URL</label>
                             <div class="control">
-                                <input name="url" class="input" type="text" placeholder="Введите URL">
+                                <input name="url" class="input" type="text" placeholder="Введите URL" autofocus>
                             </div>
                         </div>
 
