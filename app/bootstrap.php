@@ -3,5 +3,7 @@
 require_once 'config/config.php';
 
 spl_autoload_register(function ($className) {
-    require_once __NAMESPACE__ . $className . '.php';
+    $path = __NAMESPACE__ . $className . '.php';
+    $path = str_replace("\\", "/", $path);
+    require_once $path;
 });

@@ -6,11 +6,12 @@ class Router
 {
     public function __construct()
     {
-        $request = $_SERVER['REQUEST_URI'];    
+        $url = trim($_SERVER['REQUEST_URI'], '/');
+        $method = $_SERVER['REQUEST_METHOD'];    
 
-        if ($request == '/' || $request == '/index.php') {
+        if ($url == '' || $url == 'index.php') {
             new \controllers\MainController;
-        } elseif ($request == '/form.php') {
+        } elseif ($method == 'POST' && $url == 'form') {
             new \controllers\FormController;
         } else {
             new \controllers\RedirectController;

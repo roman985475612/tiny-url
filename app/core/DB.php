@@ -9,31 +9,22 @@ class DB
     public function __construct()
     {
         $this->connect();
-        $this->createDb();
         $this->createTable();
     }
 
     public function connect()
     {
         try {
-            $this->conn = new \PDO("mysql:host=" . DB_HOST, DB_USER, DB_PASS);
+            $this->conn = new \PDO("mysql:host=" . DB_HOST . ';dbname=' . DB_NAME, DB_USER, DB_PASS);
             $this->conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         } catch(PDOException $e) {
             echo "Connection failed: " . $e->getMessage();
         }
     }
 
-    public function createDb()
-    {
-        $sql = "CREATE DATABASE IF NOT EXISTS " . DB_NAME;
-        $this->conn->exec($sql);
-    }
-
     public function createTable()
     {
-        $sql = '';        
-        $sql .= "USE " . DB_NAME . ";";
-        $sql .= "CREATE TABLE IF NOT EXISTS urls (
+        $sql = "CREATE TABLE IF NOT EXISTS urls (
             id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
             url VARCHAR(255),
             short VARCHAR(255),

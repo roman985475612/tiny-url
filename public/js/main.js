@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         let data = new FormData($form);
 
-        fetch('/form.php', {
+        fetch('/form', {
             method: 'POST',
             body: data
         })
